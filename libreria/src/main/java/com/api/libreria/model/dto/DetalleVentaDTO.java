@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class DetalleCompraDTO {
+public class DetalleVentaDTO {
     private Long idLibro;
     private Integer cantidad;
 }

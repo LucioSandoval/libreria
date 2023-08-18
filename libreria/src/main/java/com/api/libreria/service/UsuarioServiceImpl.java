@@ -39,6 +39,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     private JwtTokenProvider jwtTokenProvider;
 
     private final RolReposirory rolReposirory;
+
+    /**
+     * Método inicio de sesión
+     * @param loginDTO contiene un objeto de tipo LoginDTO que contiene los campos necesarios para iniciar sesión.
+     * @return retorna un objeto de tipo RespuestaLoginDTO que contiene los datos del usuario que inicio sesión.
+     */
     @Override
     public RespuestaLoginDTO login(LoginDTO loginDTO) {
 
@@ -57,6 +63,11 @@ public class UsuarioServiceImpl implements UsuarioService {
         return MapearEntidadADTO.mapearRespuestaLoginADTO(usuario, token);
     }
 
+    /**
+     * Método que permite registrar usuario.
+     * @param usuarioDTO contiene un objeto de tipo UsuarioDTO el cual se almacenará en la base de datos.
+     * @return retorna un objeto de tipo UsuarioDTO con los datos almacenados en la base de datos.
+     */
     @Override
     public UsuarioDTO crearUsuario(UsuarioDTO usuarioDTO) {
 
@@ -64,10 +75,11 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (!validarCorreoElectronico(usuarioDTO.getCorreo())) {
             throw new IllegalArgumentException("El correo electrónico no es válido");
         }
-
+        // Validar que no exista más de un usuario con el mismo rut
         if(this.usuarioRepository.existsByRut(usuarioDTO.getRut())){
             throw new IllegalStateException("Ya existe un usuario con el rut "+ usuarioDTO.getRut());
         }
+        // Validar que no exista más de un usuario con el mismo correo electrónico
         if(this.usuarioRepository.existsByCorreo(usuarioDTO.getCorreo())){
             throw new IllegalStateException("Ya existe un usuario con el correo "+ usuarioDTO.getCorreo());
         }
@@ -80,6 +92,10 @@ public class UsuarioServiceImpl implements UsuarioService {
         return MapearEntidadADTO.mapearUsuarioADTO(usuario);
     }
 
+    /**
+     * Método que obtiene listado de usuarios.
+     * @return retorna una lista de todos los usarios de la base de datos.
+     */
     @Override
     public List<UsuarioDTO> listarUsuarios() {
         List<Usuario>listaClientes = this.usuarioRepository.findAll();
@@ -87,6 +103,12 @@ public class UsuarioServiceImpl implements UsuarioService {
                 .map( cliente -> MapearEntidadADTO.mapearUsuarioADTO(cliente)).collect(Collectors.toList());
     }
 
+    /**
+     * Método que valida el correo electrónico.
+     * @param correo  contiene un texto el cual representa el correo electrónico del usuario
+     * @return retorna un true si la dirección de correo electrónico coincide con el patrón. De lo
+     * contratio retorna false.
+     */
     public Boolean validarCorreoElectronico(String correo) {
         // Expresión regular para validar el formato del correo electrónico
         String patron =  "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";

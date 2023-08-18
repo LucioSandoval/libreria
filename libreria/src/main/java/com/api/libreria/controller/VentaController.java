@@ -1,6 +1,6 @@
 package com.api.libreria.controller;
 
-import com.api.libreria.model.dto.CompraDTO;
+import com.api.libreria.model.dto.VentaDTO;
 import com.api.libreria.service.VentaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,9 +16,9 @@ public class VentaController {
     private final VentaService ventaService;
     @PostMapping(value = "/crearVenta", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> CrearVenta(@RequestBody CompraDTO compraDTO){
+    public ResponseEntity<Object> CrearVenta(@RequestBody VentaDTO compraDTO){
         try{
-            this.ventaService.realizarCompra(compraDTO);
+            this.ventaService.crearVenta(compraDTO);
             return ResponseHandler.generarRespuesta( HttpStatus.OK, "Se realizo la compra con exito");
         }catch (IllegalStateException e){
             e.printStackTrace();

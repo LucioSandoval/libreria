@@ -1,7 +1,7 @@
 package com.api.libreria.service;
 
-import com.api.libreria.model.dto.CompraDTO;
-import com.api.libreria.model.dto.DetalleCompraDTO;
+import com.api.libreria.model.dto.VentaDTO;
+import com.api.libreria.model.dto.DetalleVentaDTO;
 import com.api.libreria.model.entity.Usuario;
 import com.api.libreria.model.entity.Libro;
 import com.api.libreria.model.entity.LibroVenta;
@@ -30,13 +30,17 @@ public class VentaServiceImpl implements VentaService{
     @Autowired
     private VentaRepository ventaRepository;
 
-    public void realizarCompra(CompraDTO compraDTO) {
+    /**
+     * Método que permite crear venta
+     * @param ventaDTO contiene un objeto de tipo VentaDTO
+     */
+    public void crearVenta(VentaDTO ventaDTO) {
 
-        if(compraDTO == null){
+        if(ventaDTO == null){
             throw new IllegalStateException("El objeto compraDTO no puede ser nulo.");
         }
 
-        this.mapearCompraDTO(compraDTO);
+        this.mapearCompraDTOAVenta(ventaDTO);
 
     }
 
@@ -46,18 +50,23 @@ public class VentaServiceImpl implements VentaService{
         return this.ventaRepository.findBy();
     }
 
-    private void mapearCompraDTO(CompraDTO compraDTO) {
-        Usuario usuario = this.usuarioRepository.findById(compraDTO.getIdUsuario())
+    /**
+     * Método que realiza la venta de libros
+     * @param ventaDTO contiene un objeto de tipo VentaDTO
+     */
+    private void mapearCompraDTOAVenta(VentaDTO ventaDTO) {
+        Usuario usuario = this.usuarioRepository.findById(ventaDTO.getIdUsuario())
                 .orElseThrow(() -> new IllegalStateException("Usuario no encontrado"));
         Float totalVenta = (float) 0;
-        List<DetalleCompraDTO> listaDetalleDTO = compraDTO.getDetalleCompraDTO();
+        List<DetalleVentaDTO> listaDetalleDTO = ventaDTO.getDetalleCompraDTO();
         Venta venta = new Venta();
         venta.setUsuario(usuario);
 
 
-        for (DetalleCompraDTO detalleCompraDTO: listaDetalleDTO) {
+        for (DetalleVentaDTO detalleCompraDTO: listaDetalleDTO) {
             Libro libro = this.libroRepository.findById(detalleCompraDTO.getIdLibro())
                     .orElseThrow(() -> new IllegalStateException("libro no encontrado"));
+            // Validar que el stock sea mayor a la cantidad de la compra
             if(libro.getStock() < detalleCompraDTO.getCantidad()){
                 throw new IllegalStateException("Stock insuficiente para el libro: " + libro.getTitulo());
             }

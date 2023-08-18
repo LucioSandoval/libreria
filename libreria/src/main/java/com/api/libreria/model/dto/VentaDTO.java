@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class CompraDTO {
+public class VentaDTO {
     private Long idUsuario;
-    private List<DetalleCompraDTO> detalleCompraDTO;
+    private List<DetalleVentaDTO> detalleCompraDTO;
 }

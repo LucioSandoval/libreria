@@ -26,5 +26,4 @@ public class Libro {
     @Column(name = "stock", nullable = false)
     private Integer stock;
 
-
 }

@@ -1,7 +1,6 @@
 package com.api.libreria.security;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +13,11 @@ public class JwtTokenProvider {
     private static  final String ACCESS_TOKEN_SECRET = "88b73517-902d-46a0-8421-9ae89335c35e";
     private static final Long EXPIRATION_TIME = 28800000L;
 
+    /**
+     * Método que genera token
+     * @param authentication objeto que contiene información del usuario autentificado
+     * @return retorna el token generado
+     */
     public String generateToken(Authentication authentication) {
 
 
@@ -32,6 +36,11 @@ public class JwtTokenProvider {
         return token;
     }
 
+    /**
+     * Método que permite extraer el rut del usuario
+     * @param token contiene un token de autentificación
+     * @return retorna el rut del usuario
+     */
     public String obtenerUserNameDelJwt(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(ACCESS_TOKEN_SECRET.getBytes())
@@ -42,6 +51,11 @@ public class JwtTokenProvider {
         return claims.getSubject();
     }
 
+    /**
+     * Método para validar token
+     * @param token contiene un token
+     * @return retorna un boleano true si el token es valido y false si no lo es
+     */
     public Boolean validarToken(String token){
         try {
             Jwts.parserBuilder()

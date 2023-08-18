@@ -6,8 +6,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LoginDTO {
+    private Long id;
     private String rut;
     private String contrasena;
-    private Long id;
+
 
 }

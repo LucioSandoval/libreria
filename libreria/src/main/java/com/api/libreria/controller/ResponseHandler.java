@@ -8,6 +8,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ResponseHandler {
+
+    /**
+     * Método que genera respuesta de tipo HTTP
+     * @param status contiene el código de estado HTTP.
+     * @param mensaje contiene un texto el cual es el mensaje de respuesta.
+     * @return retorna un objeto de tipo ResponseEntity.
+     */
     public static ResponseEntity<Object> generarRespuesta(HttpStatus status, String mensaje){
         Map<String, Object> map = new HashMap<>();
         map.put("message", mensaje);
